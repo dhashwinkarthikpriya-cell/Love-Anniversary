@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Our Memories ❤️</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="memories-page">
+
+    <!-- =================================
+         OUR MEMORIES FULL SCREEN
+    ================================== -->
+
+    <main class="memories-screen">
+
+        <!-- Background glow -->
+        <div class="memories-bg-glow glow-one"></div>
+        <div class="memories-bg-glow glow-two"></div>
+
+        <!-- Floating particles -->
+        <div class="memories-particles">
+            <span>✦</span>
+            <span>♡</span>
+            <span>✨</span>
+            <span>💕</span>
+            <span>✧</span>
+            <span>🌸</span>
+        </div>
+
+
+        <!-- Close / Back -->
+        <button
+            class="memories-close"
+            onclick="goBackToAnniversary()"
+            aria-label="Back to anniversary">
+            ✕
+        </button>
+
+
+        <!-- Header -->
+        <section class="memories-header">
+
+            <p class="memories-small-title">
+                ✦ A YEAR OF US ✦
+            </p>
+
+            <h1>
+                Our
+                <span>Memories. ❤️</span>
+            </h1>
+
+            <div class="memories-divider">
+                <span>♡</span>
+            </div>
+
+            <p>
+                Every picture holds a moment...
+                <br>
+                every moment holds a piece of us.
+            </p>
+
+        </section>
+
+
+        <!-- =================================
+             CINEMATIC PHOTO STAGE
+        ================================== -->
+
+        <section class="memory-gallery">
+
+            <div class="photo-frame">
+
+                <!-- Blurred cinematic background -->
+                <div
+                    class="photo-background"
+                    id="memoryBackground">
+                </div>
+
+                <div class="photo-glow"></div>
+
+                <!-- Main photo -->
+                <img
+                    id="memoryPhoto"
+                    src=""
+                    alt="Our memory">
+
+                <div class="photo-overlay"></div>
+
+                <!-- Cinematic light -->
+                <div class="photo-light"></div>
+
+            </div>
+
+
+            <!-- Memory number -->
+
+            <div class="memory-counter">
+                <span id="currentMemory">01</span>
+                <i>/</i>
+                <span id="totalMemories">--</span>
+            </div>
+
+
+            <!-- Caption -->
+
+            <p
+                class="memory-caption"
+                id="memoryCaption">
+                A little moment that became a beautiful memory. ❤️
+            </p>
+
+
+            <!-- Progress -->
+
+            <div class="memory-progress">
+
+                <div
+                    class="memory-progress-bar"
+                    id="memoryProgressBar">
+                </div>
+
+            </div>
+
+
+            <!-- Controls -->
+
+            <div class="memory-controls">
+
+                <button
+                    onclick="previousMemory()"
+                    aria-label="Previous memory">
+                    ←
+                </button>
+
+                <button
+                    class="pause-memory"
+                    id="pauseMemoryBtn"
+                    onclick="toggleMemorySlideshow()"
+                    aria-label="Pause slideshow">
+                    ❚❚
+                </button>
+
+                <button
+                    onclick="nextMemory()"
+                    aria-label="Next memory">
+                    →
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- Ending -->
+
+        <section class="memories-ending">
+
+            <p>
+                SOME MEMORIES NEVER FADE
+            </p>
+
+            <h2>
+                Because they became
+                <span>part of us. ❤️</span>
+            </h2>
+
+            <button
+                class="memories-back-btn"
+                onclick="goBackToAnniversary()">
+                ← Back to our story
+            </button>
+
+        </section>
+
+    </main>
+
+
+    <!-- =================================
+         OUR MEMORIES JAVASCRIPT
+    ================================== -->
+
+    <script>
+
+        /* =================================
+           ADD YOUR PHOTOS HERE
+        ================================== */
+
+        const ourMemories = [
+
+            {
+                image: "assets/memories/memory1.jpeg",
+                caption: "And somehow... one year became our story. ❤️",
+                duration: 6000
+            },
+
+            {
+                image: "assets/memories/memory2.jpeg",
+                caption: "The smiles I'll always want to remember. ✨",
+                duration: 6000
+            },
+
+            {
+                image: "assets/memories/memory3.jpeg",
+                caption: "Little moments. Big memories. 💕",
+                duration: 6000
+            },
+
+            {
+                image: "assets/memories/memory4.jpeg",
+                caption: "Every picture has a story... ours has a thousand. 🌸",
+                duration: 6000
+            },
+
+            {
+                image: "assets/memories/memory5.jpeg",
+                caption: "And every memory brings me back to you. ❤️",
+                duration: 6000
+            }
+
+        ];
+
+
+        let currentIndex = 0;
+
+        let slideshowTimer = null;
+
+        let isPaused = false;
+
+        const photo =
+            document.getElementById("memoryPhoto");
+
+        const caption =
+            document.getElementById("memoryCaption");
+
+        const currentMemory =
+            document.getElementById("currentMemory");
+
+        const totalMemories =
+            document.getElementById("totalMemories");
+
+        const progressBar =
+            document.getElementById("memoryProgressBar");
+
+        const pauseButton =
+            document.getElementById("pauseMemoryBtn");
+
+
+        /* =================================
+           LOAD MEMORY
+        ================================== */
+
+        function showMemory(index) {
+
+            if (!ourMemories.length) return;
+
+            currentIndex =
+                (index + ourMemories.length)
+                % ourMemories.length;
+
+            const memory =
+                ourMemories[currentIndex];
+
+            const photo =
+                document.getElementById("memoryPhoto");
+
+            const background =
+                document.getElementById("memoryBackground");
+
+            const caption =
+                document.getElementById("memoryCaption");
+
+            const currentMemory =
+                document.getElementById("currentMemory");
+
+            const totalMemories =
+                document.getElementById("totalMemories");
+
+            const progressBar =
+                document.getElementById("memoryProgressBar");
+
+            /* =================================
+               CINEMATIC EXIT
+            ================================= */
+
+            photo.classList.remove(
+                "memory-photo-show",
+                "kenburns-zoom",
+                "kenburns-zoomout",
+                "kenburns-left",
+                "kenburns-right",
+                "kenburns-up",
+                "kenburns-down"
+            );
+
+            photo.classList.add("memory-changing");
+
+            background.classList.remove(
+                "background-show"
+            );
+
+            setTimeout(() => {
+
+                /* =================================
+                   CHANGE IMAGE
+                ================================= */
+
+                photo.src = memory.image;
+
+                background.style.backgroundImage =
+                    `url("${memory.image}")`;
+
+                /* =================================
+                   CAPTION
+                ================================= */
+
+                caption.textContent =
+                    memory.caption;
+
+                currentMemory.textContent =
+                    String(currentIndex + 1)
+                    .padStart(2, "0");
+
+                totalMemories.textContent =
+                    String(ourMemories.length)
+                    .padStart(2, "0");
+
+
+                /* =================================
+                   RANDOM KEN BURNS
+                ================================= */
+
+                const movements = [
+                    "kenburns-zoom",
+                    "kenburns-zoomout",
+                    "kenburns-left",
+                    "kenburns-right",
+                    "kenburns-up",
+                    "kenburns-down"
+                ];
+
+                const movement =
+                    movements[
+                        currentIndex % movements.length
+                    ];
+
+                /* Force animation restart */
+
+                void photo.offsetWidth;
+
+                photo.classList.remove(
+                    "memory-changing"
+                );
+
+                photo.classList.add(
+                    "memory-photo-show",
+                    movement
+                );
+
+                background.classList.add(
+                    "background-show"
+                );
+
+                /* =================================
+                   PROGRESS
+                ================================= */
+
+                const progress =
+                    ((currentIndex + 1)
+                    / ourMemories.length) * 100;
+
+                progressBar.style.width =
+                    progress + "%";
+
+            }, 600);
+
+            resetSlideshow();
+
+        }
+
+
+        /* =================================
+           NEXT
+        ================================== */
+
+        function nextMemory() {
+
+            showMemory(currentIndex + 1);
+
+        }
+
+
+        /* =================================
+           PREVIOUS
+        ================================== */
+
+        function previousMemory() {
+
+            showMemory(currentIndex - 1);
+
+        }
+
+
+        /* =================================
+           PROGRESS
+        ================================== */
+
+        function updateProgress() {
+
+            const progress =
+                ((currentIndex + 1)
+                / ourMemories.length) * 100;
+
+            progressBar.style.width =
+                progress + "%";
+
+        }
+
+
+        /* =================================
+           AUTO SLIDESHOW
+        ================================== */
+
+        function startSlideshow() {
+
+            clearTimeout(slideshowTimer);
+
+            if (isPaused) return;
+
+            slideshowTimer = setTimeout(() => {
+
+                nextMemory();
+
+            }, ourMemories[currentIndex].duration);
+
+        }
+
+
+        function resetSlideshow() {
+
+            clearTimeout(slideshowTimer);
+
+            if (!isPaused) {
+
+                slideshowTimer =
+                    setTimeout(() => {
+
+                        nextMemory();
+
+                    }, ourMemories[currentIndex].duration);
+
+            }
+
+        }
+
+
+        /* =================================
+           PAUSE / PLAY
+        ================================== */
+
+        function toggleMemorySlideshow() {
+
+            isPaused = !isPaused;
+
+            if (isPaused) {
+
+                clearTimeout(slideshowTimer);
+
+                pauseButton.textContent = "▶";
+
+            } else {
+
+                pauseButton.textContent = "❚❚";
+
+                startSlideshow();
+
+            }
+
+        }
+
+
+        /* =================================
+           BACK TO ANNIVERSARY
+        ================================== */
+
+        function goBackToAnniversary() {
+
+            window.location.href =
+                "index.html#anniversary";
+
+        }
+
+
+        /* =================================
+           IMAGE LOAD
+        ================================== */
+
+        photo.addEventListener(
+            "load",
+            () => {
+
+                photo.classList.add(
+                    "memory-photo-show"
+                );
+
+            }
+        );
+
+
+        /* =================================
+           START
+        ================================== */
+
+        showMemory(0);
+
+    </script>
+
+</body>
+</html>
